@@ -107,7 +107,7 @@ if __name__ == "__main__":
             if not player_move in board.available_moves():
                 continue
             board.make_move(player_move, player)
-
+            
             if board.complete():
                 break
             comp_player = get_enemy(player)
@@ -125,6 +125,31 @@ if __name__ == "__main__":
         else:
             print "Game Tied"
     elif response=='n':
+        player = 'X'
+        comp_player = get_enemy(player)
+        board.make_move(0, comp_player)
         board.show()
+
+        while not board.complete():
+            player_move = int(raw_input("Next Move: ")) - 1
+            if not player_move in board.available_moves():
+                continue
+            board.make_move(player_move, player)
+
+            if board.complete():
+                break
+            comp_win = board.win(comp_player)
+            comp_block = board.block(comp_player)
+            if comp_win:
+                board.make_move(comp_win, comp_player)
+            elif comp_block:
+                board.make_move(comp_block, comp_player)
+            else:
+                board.make_move(random.choice(board.available_moves()), comp_player)
+            board.show()
+        if board.winner():
+            print "Winner is: "+board.winner()
+        else:
+            print "Game Tied"
     else:
         print "Invalid Response"
