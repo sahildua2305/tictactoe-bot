@@ -16,6 +16,9 @@ class Board(object):
 
     def show(self):
         for element in [self.squares[i:i + 3] for i in range(0, len(self.squares), 3)]:
+            for i in range(len(element)):
+                if element[i] is None:
+                    element[i] = '-'
             print element
     
     def available_moves(self):
@@ -96,7 +99,11 @@ def get_enemy(player):
     return 'X'
 
 if __name__ == "__main__":
-
+    print "The numbers of grids are as following:"
+    li = range(1,10)
+    for i in [li[i:i+3] for i in range(0, 9, 3)]:
+        print i
+    score = [0,0,0] #1st element keeps the count of wins and 2nd one keeps the count of losses and 3rd one keeps count of tied games
     while(1):
         board = Board()
         response = raw_input("Will you like to have the first turn yourself? (y/n): ")
@@ -104,7 +111,7 @@ if __name__ == "__main__":
             board.show()
             while not board.complete():
                 player = 'X'
-                player_move = int(raw_input("Next Move: ")) - 1
+                player_move = int(raw_input("Your Move: ")) - 1
                 if not player_move in board.available_moves():
                     continue
                 board.make_move(player_move, player)
@@ -120,11 +127,20 @@ if __name__ == "__main__":
                     board.make_move(comp_block, comp_player)
                 else:
                     board.make_move(random.choice(board.available_moves()), comp_player)
+                print
                 board.show()
-            if board.winner():
+            winner = board.winner()
+            if winner:
                 print "Winner is: "+board.winner()
+                if winner == 'X':
+                    score[0] += 1
+                else:
+                    score[1] += 1
+                print "Current Score:\nWins: %d\nLosses: %d\nTies: %d\n"%(score[0], score[1], score[2])
             else:
                 print "Game Tied"
+                score[2] += 1
+                print "Current Score:\nWins: %d\nLosses: %d\nTies: %d\n"%(score[0], score[1], score[2])
         elif response=='n':
             player = 'X'
             comp_player = get_enemy(player)
@@ -132,7 +148,7 @@ if __name__ == "__main__":
             board.show()
 
             while not board.complete():
-                player_move = int(raw_input("Next Move: ")) - 1
+                player_move = int(raw_input("Your Move: ")) - 1
                 if not player_move in board.available_moves():
                     continue
                 board.make_move(player_move, player)
@@ -147,14 +163,23 @@ if __name__ == "__main__":
                     board.make_move(comp_block, comp_player)
                 else:
                     board.make_move(random.choice(board.available_moves()), comp_player)
+                print
                 board.show()
-            if board.winner():
+            winner = board.winner()
+            if winner:
                 print "Winner is: "+board.winner()
+                if winner == 'X':
+                    score[0] += 1
+                else:
+                    score[1] += 1
+                print "Current Score:\nWins: %d\nLosses: %d\nTies: %d\n"%(score[0], score[1], score[2])
             else:
                 print "Game Tied"
+                score[2] += 1
+                print "Current Score:\nWins: %d\nLosses: %d\nTies: %d\n"%(score[0], score[1], score[2])
         else:
             print "Invalid Response"
-        play_again = raw_input("Wanna play again? (y/n): ")
+        play_again = raw_input("\nWanna play again? (y/n): ")
         if play_again=='y':
             continue
         else:
