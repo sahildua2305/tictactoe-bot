@@ -97,28 +97,34 @@ def get_enemy(player):
 
 if __name__ == "__main__":
     board = Board()
-    board.show()
 
-    while not board.complete():
-        player = 'X'
-        player_move = int(raw_input("Next Move: ")) - 1
-        if not player_move in board.available_moves():
-            continue
-        board.make_move(player_move, player)
-
-        if board.complete():
-            break
-        comp_player = get_enemy(player)
-        comp_win = board.win(comp_player)
-        comp_block = board.block(comp_player)
-        if comp_win:
-            board.make_move(comp_win, comp_player)
-        elif comp_block:
-            board.make_move(comp_block, comp_player)
-        else:
-            board.make_move(random.choice(board.available_moves()), comp_player)
+    response = raw_input("Will you like to have the first turn yourself? (y/n): ")
+    if response=='y':
         board.show()
-    if board.winner():
-        print "Winner is: "+board.winner()
+        while not board.complete():
+            player = 'X'
+            player_move = int(raw_input("Next Move: ")) - 1
+            if not player_move in board.available_moves():
+                continue
+            board.make_move(player_move, player)
+
+            if board.complete():
+                break
+            comp_player = get_enemy(player)
+            comp_win = board.win(comp_player)
+            comp_block = board.block(comp_player)
+            if comp_win:
+                board.make_move(comp_win, comp_player)
+            elif comp_block:
+                board.make_move(comp_block, comp_player)
+            else:
+                board.make_move(random.choice(board.available_moves()), comp_player)
+            board.show()
+        if board.winner():
+            print "Winner is: "+board.winner()
+        else:
+            print "Game Tied"
+    elif response=='n':
+        board.show()
     else:
-        print "Game Tied"
+        print "Invalid Response"
